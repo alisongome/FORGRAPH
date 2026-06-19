@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FORGRAPH — Sistema de Análise de Vínculos por Grafos</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="brand-row">
+          <span class="brand-mark">F</span>
+          <div>
+            <h1>FORGRAPH</h1>
+            <p>Grafo de propriedades heterogêneo, temporal e orientado a evidências</p>
+          </div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="ghost" id="btnPresentation">Modo apresentação</button>
+        <button class="primary" id="btnReport">Gerar relatório</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar left-panel">
+        <section class="card">
+          <span class="eyebrow">Caso acadêmico</span>
+          <h2>Análise centrada em alvo</h2>
+          <p class="muted">
+            Dados fictícios usados para demonstrar modelagem, estrutura de dados e algoritmos de Teoria dos Grafos.
+          </p>
+
+          <label class="field-label" for="targetSelect">Alvo principal</label>
+          <select id="targetSelect"></select>
+
+          <label class="field-label" for="searchInput">Busca</label>
+          <input id="searchInput" type="search" placeholder="Pessoa, empresa, conta, endereço, processo..." />
+
+          <div class="mini-grid">
+            <button class="chip active" data-view="ego">Ego-net</button>
+            <button class="chip" data-view="timeline">Timeline</button>
+            <button class="chip" data-view="matrix">Matriz</button>
+            <button class="chip" data-view="map">Mapa</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <span class="eyebrow">Filtros</span>
+          <h3>Tipos de vértice</h3>
+          <div id="nodeFilters" class="filter-list"></div>
+
+          <h3 class="mt">Tipos de aresta</h3>
+          <div id="edgeFilters" class="filter-list"></div>
+        </section>
+
+        <section class="card modeling">
+          <span class="eyebrow">Modelagem do grafo</span>
+          <h3>Quem são os nós?</h3>
+          <p>Investigados, pessoas, organizações, contas, endereços, dispositivos, eventos, documentos e processos.</p>
+
+          <h3>Quem são as arestas?</h3>
+          <p>Relações familiares, profissionais, societárias, financeiras, geográficas, digitais, comunicacionais, documentais e judiciais.</p>
+
+          <h3>Estrutura</h3>
+          <p><strong>Lista de adjacência</strong>, com arestas tipadas, ponderadas, temporais e ligadas a evidências.</p>
+        </section>
+      </aside>
+
+      <section class="canvas-wrap">
+        <div class="canvas-toolbar">
+          <div>
+            <span class="status-dot"></span>
+            <strong id="viewTitle">Ego-net do alvo</strong>
+            <small id="viewSubtitle">Nós em até 2 saltos, com progressive disclosure</small>
+          </div>
+          <div class="toolbar-actions">
+            <button class="ghost small" id="zoomOut">−</button>
+            <button class="ghost small" id="zoomIn">+</button>
+            <button class="ghost small" id="btnReset">Centralizar</button>
+          </div>
+        </div>
+
+        <div id="graphStage" class="graph-stage">
+          <svg id="graphSvg" role="img" aria-label="Visualização do grafo FORGRAPH"></svg>
+          <div id="timelineView" class="timeline-view hidden"></div>
+          <div id="matrixView" class="matrix-view hidden"></div>
+          <div class="legend" id="legend"></div>
+        </div>
+      </section>
+
+      <aside class="sidebar right-panel">
+        <section class="card details-card">
+          <span class="eyebrow">Drill-down</span>
+          <h2 id="detailTitle">Selecione um nó ou aresta</h2>
+          <div id="detailBody" class="detail-body">
+            Clique em um elemento do grafo para ver propriedades, validade temporal, score e evidências.
+          </div>
+        </section>
+
+        <section class="card">
+          <span class="eyebrow">Algoritmos</span>
+          <h3>Núcleo de Teoria dos Grafos</h3>
+          <div class="algo-grid">
+            <button data-algo="bfs">BFS</button>
+            <button data-algo="dfs">DFS</button>
+            <button data-algo="dijkstra">Dijkstra</button>
+            <button data-algo="centrality">Centralidade</button>
+            <button data-algo="pagerank">PageRank</button>
+            <button data-algo="components">Comunidades</button>
+            <button data-algo="cycles">Ciclos financeiros</button>
+            <button data-algo="mst">MST/Kruskal</button>
+            <button data-algo="adjacency">Lista de adjacência</button>
+          </div>
+        </section>
+
+        <section class="card output-card">
+          <span class="eyebrow">Resultado técnico</span>
+          <div id="algoOutput" class="algo-output">
+            Abra um alvo e execute um algoritmo para ver o resultado.
+          </div>
+        </section>
+
+        <section class="card score-card">
+          <span class="eyebrow">Score composto</span>
+          <p>
+            O peso exibido não é fixo: ele é calculado por frequência, valor, recência, duração,
+            confiança da fonte, corroboração e relevância estrutural.
+          </p>
+          <code>score = tipo × norm(f, v, r, d, c, x, s)</code>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <div id="presentationOverlay" class="presentation-overlay hidden">
+    <button id="closePresentation" class="close-btn">×</button>
+    <h2>FORGRAPH</h2>
+    <p>Sistema acadêmico de análise de vínculos por grafos.</p>
+    <div class="presentation-grid">
+      <div><strong>Vértices</strong><span>Pessoas, empresas, contas, imóveis, documentos, eventos e processos.</span></div>
+      <div><strong>Arestas</strong><span>Vínculos tipados, temporais, ponderados e associados a evidências.</span></div>
+      <div><strong>Estrutura</strong><span>Lista de adjacência.</span></div>
+      <div><strong>Algoritmos</strong><span>BFS, DFS, Dijkstra, centralidades, ciclos, componentes e MST.</span></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
